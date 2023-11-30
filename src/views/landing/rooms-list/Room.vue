@@ -19,10 +19,10 @@
             mdi-map-marker
           </VIcon>
           <span class='room-location my-2'>
-           {{ room.building }}-{{ room.floorN }}
+           {{ room.building }}-{{ room.floorNo }}
           </span>
         </p>
-        <p class='room-title'>
+        <p class='room-title text-capitalize'>
           {{ room.name }}
         </p>
         <VRow class="justify-space-between mt-2 my-2" >
@@ -59,7 +59,6 @@
         </VRow>
       </VCardText>
       <VCardActions>
-
         <VBtn
           color='orange'
           variant='outlined'
@@ -101,6 +100,8 @@ const props = defineProps({
     type: Boolean,
   },
 })
+
+
 const isOpenReservationDialog=ref(false)
 const isViewClassRoomDialog=ref(false)
 </script>

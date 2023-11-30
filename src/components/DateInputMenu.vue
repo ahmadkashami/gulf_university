@@ -16,7 +16,6 @@
             hide-details="auto"
             :rules="rules?rules:[]"
             :error-messages="errorMessages"
-            clearable
             required
             variant="outlined"
             prepend-inner-icon="mdi-calendar-range"
@@ -29,7 +28,7 @@
         <VDatePicker
           ref="picker"
           v-model="initData"
-          scrollable
+          scrollabel
           color="primary"
           :allowed-dates="allowedDates"
           :readonly="readonly"
@@ -104,7 +103,7 @@ export default {
       // getter
       get() {
         if(props.date==null)return null
-        return new Date(props.date).toLocaleDateString()
+        return  formatDate(props.date)
       },
 
       // setter

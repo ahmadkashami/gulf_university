@@ -9,7 +9,7 @@
             <date-input-menu
               :date='date'
               label='Date'
-              @update-date='updateEndDate'
+              @update-date='updateDate'
               :disabled="reservationMode"
             ></date-input-menu>
           </v-col>
@@ -29,7 +29,7 @@
               color="primary"
               bg-color="white"
               :items="fromHours"
-              item-title="lable"
+              item-title="label"
               item-value="value"
               clearable
               :disabled="reservationMode"
@@ -50,7 +50,7 @@
               color="primary"
               bg-color="white"
               :items="toHours.filter(b=>b.value>fromTime)"
-              item-title="lable"
+              item-title="label"
               item-value="value"
               :disabled="fromTime==null||reservationMode"
               clearable
@@ -70,7 +70,7 @@
       <VRow class="mt-4">
         <VCol cols='12'>
           <p class='paragraph-bold-title'>
-            {{ !reservationMode ? 'Discover' : 'Available' }} classes
+            {{ !reservationMode ? 'Discover' : 'Availabel' }} classes
           </p>
         </VCol>
       </VRow>
@@ -105,7 +105,7 @@ const {
   fromTime,
   toTime,
   reservationMode,
-  updateEndDate,
+  updateDate,
   onSearch,
   onReset,
   fetchTimeSlots,

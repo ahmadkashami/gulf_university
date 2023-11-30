@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if='room'
+    v-if='reservation'
     id='room-div'
   >
     <VCard class='mx-auto'>
@@ -13,16 +13,16 @@
             mdi-map-marker
           </VIcon>
           <span class='room-location my-2'>
-           {{ room.building }}-{{ room.floorN }}
+           {{ reservation.classroom.building }}-{{ reservation.classroom.floorNo }}
           </span>
         </p>
         <p
-          class='room-title'
+          class='room-title text-capitalize'
         >
-          {{ room.name }}
+          {{ reservation.classroom.name }}
         </p>
-        <VRow class="justify-space-between mt-2 my-2" >
-          <VCol cols='6'>
+        <VRow class="justify-space-between mt-2 my-2">
+          <VCol cols='12'>
             <p>
               <VIcon
                 color='#000'
@@ -32,7 +32,10 @@
                 mdi-clock-time-eleven-outline
               </VIcon>
               <span class='font-weight-bold'>
-                 {{ room.time }}
+               From :  {{ reservation.from.label }}
+              </span>
+              <span class='font-weight-bold'>
+               to:  {{ reservation.to.label }}
               </span>
             </p>
           </VCol>
@@ -45,7 +48,7 @@
 
 <script setup>
 const props = defineProps({
-  room: {
+  reservation: {
     type: Object,
   },
 })

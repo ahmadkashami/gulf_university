@@ -8,14 +8,18 @@ export default function useWeb() {
   const route = useRoute()
   const roomsList = ref([])
   const timeSlots = ref([])
+  const fromTimeSlots = ref([])
+  const toTimeSlots = ref([])
+  const slotScaleValue = ref(1)
+
+
+  //gel list of  classes
   const fetchDataList = () => {
-    // let from = timeSlots.value.filter(b => b.value == fromTime.value)[0]?.timeValue
-    // let to = timeSlots.value.filter(b => b.value == toTime.value)[0]?.timeValue
     let dateFormat = formatDate(date.value)
     store.dispatch('public/fetchRoomsList', {
       date: date.value ? dateFormat : null,
-      from:fromTime.value, //(from && date.value) ? new Date(`${dateFormat},${from}:00`) : null,
-      to: toTime.value//(to && date.value) ? new Date(`${dateFormat},${to}:00`) : null,
+      from: fromTime.value,
+      to: toTime.value
     })
       .then(response => {
         roomsList.value = response.data.data
@@ -25,25 +29,32 @@ export default function useWeb() {
     })
   }
 
-
+  //get time slots in system
   const fetchTimeSlots = () => {
     store.dispatch('public/fetchTimeSlots')
       .then(response => {
-        timeSlots.value = response.data
+        timeSlots.value = response.data.data
+        fromTimeSlots.value = [...response.data.data]
+        toTimeSlots.value = [...response.data.data]
+        slotScaleValue.value = response.data.slotScaleValue
+
         store.commit('public/UPDATE_TIME_SLOTS', timeSlots.value)
+        store.commit('public/UPDATE_SLOT_SCALE_VALUE', slotScaleValue.value)
+        store.commit('public/UPDATE_FROM_TIME_SLOTS', fromTimeSlots.value.splice(0, timeSlots.value.length - 1))
+        store.commit('public/UPDATE_TO_TIME_SLOTS', toTimeSlots.value.splice(1, timeSlots.value.length))
       }).catch(error => {
       console.log(error)
     })
   }
-
-  const fromHours = computed(()=>{
-    const timeSlotsData=store.state.public.timeSlots;
-    return timeSlotsData.splice(0,store.state.public.timeSlots.length-1)
+  //setup  hours
+  const fromHours = computed(() => {
+    return store.state.public.fromTimeSlots
+  })
+  const toHours = computed(() => {
+    return store.state.public.toTimeSlots
   })
 
-  const toHours = computed(()=>{
-    return  store.state.public.timeSlots
-  })
+
 
   const updateStateValues = () => {
     store.commit('public/UPDATE_DATE', date.value)
@@ -54,7 +65,7 @@ export default function useWeb() {
   const fromTime = ref(null)
   const toTime = ref(null)
   const reservationMode = ref(false)
-  const updateEndDate = (val) => {
+  const updateDate = (val) => {
     date.value = val
   }
   const onSearch = () => {
@@ -90,7 +101,7 @@ export default function useWeb() {
     fromTime,
     toTime,
     reservationMode,
-    updateEndDate,
+    updateDate,
     onSearch,
     onReset,
     roomsListData,

@@ -10,25 +10,90 @@
         </VCol>
         <VCol cols="12">
           <h4 class='text-banner-2 mx-auto'>
-            Classroom  Reservation System
+            Classroom Reservation System
           </h4>
         </VCol>
       </VRow>
     </CoverImage>
     <VContainer id="reservation-classes">
+      <v-card class="filter v-card-filter pa-5">
+        <v-row>
+          <v-col cols="12"
+                 md="4"
+          ></v-col>
+          <v-col cols="12"
+                 md="4"
+          >
+            <date-input-menu
+              :date='date'
+              label='Date'
+              @update-date='updateDate'
+            ></date-input-menu>
+          </v-col>
+          <v-col cols="12"
+                 md="4"
+          ></v-col>
+<!--          <v-col-->
+<!--            cols="12"-->
+<!--            md="4"-->
+<!--          >-->
+<!--            <v-select-->
+<!--              v-model="fromTime"-->
+<!--              :counter="10"-->
+<!--              label="From Time"-->
+<!--              hide-details-->
+<!--              required-->
+<!--              variant="outlined"-->
+<!--              prepend-inner-icon="mdi-clock-time-eight-outline"-->
+<!--              color="primary"-->
+<!--              bg-color="white"-->
+<!--              :items="fromHours"-->
+<!--              item-title="label"-->
+<!--              item-value="value"-->
+<!--              clearable-->
+<!--            ></v-select>-->
+<!--          </v-col>-->
+<!--          <v-col-->
+<!--            cols="12"-->
+<!--            md="4"-->
+<!--          >-->
+<!--            <v-select-->
+<!--              v-model="toTime"-->
+<!--              :counter="10"-->
+<!--              label="To Time"-->
+<!--              hide-details-->
+<!--              required-->
+<!--              variant="outlined"-->
+<!--              prepend-inner-icon="mdi-clock-time-eight-outline"-->
+<!--              color="primary"-->
+<!--              bg-color="white"-->
+<!--              :items="toHours.filter(b=>b.value>fromTime)"-->
+<!--              item-title="label"-->
+<!--              item-value="value"-->
+<!--              :disabled="fromTime==null"-->
+<!--              clearable-->
+<!--            ></v-select>-->
+<!--          </v-col>-->
+        </v-row>
+        <div class="justify-center text-center mt-5">
+          <v-btn color="primary" variant="outlined"  @click="fetchReservationsList">
+            filter
+          </v-btn>
+        </div>
+      </v-card>
       <VRow>
         <VCol cols='12'>
-          <p class='paragraph-bold-title'>
+          <p class='paragraph-bold-title mt-5'>
             Reservation Classes
           </p>
         </VCol>
       </VRow>
       <VRow>
         <VCol
-          cols='12' xl='3' lg='3' md='4' sm='6' class='text-center'
+          cols='12' xl='4' lg='4' md='4' sm='6' class='text-center'
           v-for='(item,i) in roomsListData' :key="i"
         >
-          <RoomReservation :room='item'></RoomReservation>
+          <RoomReservation :reservation='item'></RoomReservation>
         </VCol>
       </VRow>
     </VContainer>
@@ -40,73 +105,58 @@
 import MainHeader from "@/views/landing/header/MainHeader.vue";
 import CoverImage from "@/views/landing/components/CoverImage.vue";
 import ClassRoom from '@/assets/images/classroom.jpg'
-import {ref} from "vue";
-import Background from "@/assets/images/slider.png";
+import {onMounted, ref} from "vue";
 import RoomReservation from "@/views/landing/Reservations/RoomReservation.vue";
+import formatDate from "@/plugins/custom-date";
+import {store} from "@/store";
+import DateInputMenu from "@/components/DateInputMenu.vue";
+import useWeb from "@/views/web/useWeb";
 
 
-const roomsListData = ref([
-  {
-    name: "Classroom 2",
-    location: " Building 0 - IT",
-    chair: 10,
-    projector: false,
-    cover_image: Background,
-    time:"12:00PM"
-  },
-  {
-    name: "Classroom 3",
-    location: " Building 9 - IT",
-    chair: 12,
-    projector: false,
-    cover_image: Background,
-    time:"12:00PM"
-  },
-  {
-    name: "Classroom 5",
-    location: " Building 8 - IT",
-    chair: 12,
-    projector: true,
-    cover_image: Background,
-    time:"12:00PM"
-  },
-  {
-    name: "Classroom 5",
-    location: " Building 6 - IT",
-    chair: 20,
-    projector: false,
-    cover_image: Background,
-    time:"12:00PM"
-  },
-  {
-    name: "Classroom 6",
-    location: " Building 6 - IT",
-    chair: 15,
-    cover_image: Background,
-    projector: true,
-    time:"12:00PM"
-  },
-  {
-    name: "Classroom 7",
-    location: " Building 4 - IT",
-    chair: 18,
-    cover_image: Background,
-    projector: false,
-    time:"12:00PM"
-  },
-  {
-    name: "Classroom 8",
-    location: " Building 2 - IT",
-    chair: 10,
-    cover_image: Background,
-    projector: true,
-    time:"12:00PM"
-  },
-])
+//gel list of  classes
+const roomsListData = ref([])
+
+
+const {
+  date,
+  updateDate,
+  fetchTimeSlots
+} = useWeb()
+const fetchReservationsList = () => {
+  let dateFormat = formatDate(date.value)
+  store.dispatch('public/fetchReservationsList', {
+    date: date.value ? dateFormat : null,
+  })
+    .then(response => {
+      roomsListData.value = response.data.data
+    }).catch(error => {
+    console.log(error)
+  })
+}
+
+onMounted(() => {
+  date.value=new Date()
+  fetchTimeSlots();
+  fetchReservationsList()
+})
 
 </script>
 <style scoped>
-#reservation-classes{
+#reservation-classes {
   margin-top: -100px;
+}
+.filter {
+  margin-top: -100px;
+  padding: 30px !important;
+  z-index: 1 !important;
+}
+
+.v-card-filter {
+  box-shadow: none !important;
+  background: #001df508 !important;
+  border-radius: 16px !important;;
+  border: 1px white solid !important;;
+  backdrop-filter: blur(4px) !important;;
+  text-align: start !important;
 }
 </style>

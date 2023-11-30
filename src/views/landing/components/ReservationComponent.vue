@@ -41,7 +41,7 @@
                       Room location :
                     </div>
                     <div class="mx-2 rounded pa-1 bg-grey-100">
-                      {{ itemData.building }}-{{ itemData.floorN }}
+                      {{ itemData.building }}-{{ itemData.floorNo }}
                     </div>
                   </div>
                   <div class="d-flex mb-3">
@@ -49,7 +49,7 @@
                       Date :
                     </div>
                     <div class="mx-2 rounded pa-1 bg-grey-100">
-                      {{ date }}
+                      {{ formatDate(date) }}
                     </div>
                   </div>
                   <div class="d-flex flex-row">
@@ -88,13 +88,13 @@
             variant="outlined"
             @click="onSubmit"
           >
-            reserve
+            reserve now
           </VBtn>
           <VBtn
             color="orange"
             variant="outlined"
             type="reset"
-            @click="closeReservationDialog"
+            @click="$emit('update:is-open-reservation-dialog',false)"
           >
             Cancel
           </VBtn>
@@ -114,8 +114,9 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import {store} from '@/store'
+import formatDate from "@/plugins/custom-date";
 
 const props = defineProps({
   isOpenReservationDialog: {
@@ -137,7 +138,14 @@ const isOpenReservationDialog = computed({
   },
 })
 
+const loading = ref(false)
+const msgSnackbarVisible = ref(null)
+const isOutlinedSnackbarColor = ref('')
+const isOutlinedSnackbarVisible = ref(null)
 
+const timeSlots = computed(() => {
+  return store.state.public.timeSlots
+})
 const fromTime = computed(() => {
   return store.state.public.fromTime
 })
@@ -148,23 +156,41 @@ const date = computed(() => {
   return new Date(store.state.public.date).toLocaleDateString()
 })
 
+const formTimeLabel = ref(null)
+const toTimeLabel = ref(null)
 
-const loading = ref(false)
-const msgSnackbarVisible = ref(null)
-const isOutlinedSnackbarColor = ref('')
-const isOutlinedSnackbarVisible = ref(null)
+onMounted(() => {
+  formTimeLabel.value = timeSlots.value.filter(b => b.value == fromTime.value)[0]?.label
+  toTimeLabel.value = timeSlots.value.filter(b => b.value == toTime.value)[0]?.label
+})
+
+
+
+//Reserve Room
 const closeReservationDialog = () => {
-  setTimeout(() => {
-    emit('update:is-open-reservation-dialog', false)
-    loading.value = false
-  }, 1000)
+  emit('update:is-open-reservation-dialog', false)
+  loading.value = false
 }
+
 const onSubmit = () => {
   loading.value = true
-  msgSnackbarVisible.value = "Reservation Successfully"
-  isOutlinedSnackbarColor.value = "success"
-  isOutlinedSnackbarVisible.value = true
-  closeReservationDialog()
+  store.dispatch('public/reserveRoom',
+    {
+      id: props.itemData.id,
+      from: fromTime.value,
+      to: toTime.value,
+      date: formatDate(date.value),
+    }).then(() => {
+    msgSnackbarVisible.value = "Reservation Successfully"
+    isOutlinedSnackbarColor.value = "success"
+    isOutlinedSnackbarVisible.value = true
+    closeReservationDialog()
+  }).catch((error) => {
+    console.log(error)
+    msgSnackbarVisible.value = error.response.data.message
+    isOutlinedSnackbarColor.value = "error"
+    isOutlinedSnackbarVisible.value = true
+    closeReservationDialog()
+  })
 }
-
 </script>

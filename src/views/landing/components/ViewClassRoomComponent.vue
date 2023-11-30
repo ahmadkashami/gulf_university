@@ -39,7 +39,7 @@
                       Classroom location :
                     </div>
                     <div class="mx-2 rounded pa-1 bg-grey-100">
-                      {{ itemData.building }}-{{ itemData.floorN }}
+                      {{ itemData.building }}-{{ itemData.floorNo }}
                     </div>
                   </div>
                   <div class="d-flex mb-3">
@@ -91,7 +91,7 @@
                     <date-input-menu
                       :date='date'
                       label='Date'
-                      @update-date='updateEndDate'
+                      @update-date='updateDate'
                       density="compact"
                     ></date-input-menu>
                   </v-col>
@@ -107,7 +107,7 @@
                       color="primary"
                       bg-color="white"
                       :items="fromHours"
-                      item-title="timeValue"
+                      item-title="label"
                       item-value="value"
                       clearable
                       @update:model-value="onChangeTime"
@@ -126,7 +126,7 @@
                       color="primary"
                       bg-color="white"
                       :items="toHours.filter(b=>b.value>fromTime)"
-                      item-title="timeValue"
+                      item-title="label"
                       item-value="value"
                       clearable
                       @update:model-value="onChangeTime"
@@ -137,11 +137,12 @@
               </VCol>
             </VRow>
             <VRow class="ma-1  rounded pt-4">
-              <VCol cols="3" md="1" lg="1" v-for="n in timeSlots.filter(b=>(b.value>=fromTime&&b.value<=toTime-1))"
+              <VCol cols="3" md="1" lg="1"
+                    v-for="n in timeSlots.filter(b=>(b.value>=fromTime&&(b.value<=toTime-slotScaleValue)))"
                     :key="n.value" class="pa-0">
-                <v-sheet height="40" :color="events.filter(b=>b.hour==n.value).length>0?'red':'green'"
+                <v-sheet height="40" :color="events.filter(b=>b.value==n.value)[0]?.reserved?'red':'green'"
                          class="d-flex flex-column  justify-center align-center text-white">
-                   {{ n.timeValue }}
+                  {{ n.label }}
                 </v-sheet>
               </VCol>
             </VRow>
@@ -160,13 +161,13 @@
             variant="outlined"
             @click="onSubmit"
           >
-            reserve
+            reserve now
           </VBtn>
           <VBtn
             color="orange"
             variant="outlined"
             type="reset"
-            @click="closeViewDialog"
+            @click="$emit('update:is-view-class-room-dialog',false)"
           >
             Cancel
           </VBtn>
@@ -180,15 +181,17 @@
       position="absolute"
       vertical
     >
-   <p>{{ msgSnackbarVisible }}</p>
+      <p>{{ msgSnackbarVisible }}</p>
     </VSnackbar>
   </div>
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import useWeb from "@/views/web/useWeb";
 import DateInputMenu from "@/components/DateInputMenu.vue";
+import {store} from "@/store";
+import formatDate from "@/plugins/custom-date";
 
 const props = defineProps({
   isViewClassRoomDialog: {
@@ -215,12 +218,7 @@ const loading = ref(false)
 const msgSnackbarVisible = ref(null)
 const isOutlinedSnackbarColor = ref('')
 const isOutlinedSnackbarVisible = ref(null)
-const closeViewDialog = () => {
-  setTimeout(() => {
-    emit('update:is-view-class-room-dialog', false)
-    loading.value = false
-  }, 1000)
-}
+
 const {
   fromHours,
   toHours,
@@ -228,49 +226,87 @@ const {
   fromTime,
   toTime,
   reservationMode,
-  updateEndDate,
+  updateDate,
 } = useWeb()
-const onSubmit = () => {
-  loading.value = true
-  msgSnackbarVisible.value = "Reservation Successfully"
-  isOutlinedSnackbarColor.value = "success"
-  isOutlinedSnackbarVisible.value = true
-  closeViewDialog()
-}
 
-onMounted(() => {
-  toTime.value = 20;
-  fromTime.value = 8;
-  date.value=new Date().toLocaleDateString()
+
+const timeSlots = computed(() => {
+  return store.state.public.timeSlots
 })
 
-const events = ref([
-  {
-    hour: 11,
-    reserved: true
-  },
-  {
-    hour: 14,
-    reserved: true
-  },
-  {
-    hour: 10,
-    reserved: true
-  },
-])
-const {timeSlots} = useWeb()
+onMounted(() => {
+  console.log(timeSlots.value)
+  toTime.value = timeSlots.value[timeSlots.value.length - 1]?.value;
+  fromTime.value = timeSlots.value[0]?.value;
+  date.value = new Date()
+})
 
+
+const events = ref([])
+const slotScaleValue = computed(() => {
+  return store.state.public.slotScaleValue
+})
+//get classroom data
+const getClassRoomSchedule = () => {
+  store.dispatch('public/getClassRoomSchedule', {
+    id: props.itemData.id,
+    date: formatDate(date.value)
+  })
+    .then(response => {
+      events.value = response.data.data.timeSlots
+    }).catch(error => {
+    console.log(error)
+  })
+}
+watch(
+  () => (props.isViewClassRoomDialog),
+  () => {
+    if (props.isViewClassRoomDialog) {
+      getClassRoomSchedule()
+    }
+  },
+)
 
 const onChangeTime = () => {
-  console.log(1)
-  let eventsDuration = []
-  eventsDuration = events.value.filter(b => (b.hour >= fromTime.value && b.hour <= toTime.value - 1));
-  if (toTime.value == null || fromTime.value == null) {
-    reservationMode.value = false;
-  } else if (eventsDuration.length == 0) {
-    reservationMode.value = true;
-  } else {
+  loading.value=true
+  store.dispatch('public/getClassRoomAvailability', {
+    id: props.itemData.id,
+    from: fromTime.value,
+    to: toTime.value,
+    date: formatDate(date.value),
+  }).then((response) => {
+    reservationMode.value = response.data.valid
+    loading.value=false
+  }).catch(() => {
     reservationMode.value = false
-  }
+    loading.value=false
+  })
+}
+
+
+//Reserve Room
+const closeViewDialog = () => {
+  emit('update:is-view-class-room-dialog', false)
+  loading.value = false
+}
+const onSubmit = () => {
+  loading.value = true
+  store.dispatch('public/reserveRoom',
+    {
+      id: props.itemData.id,
+      from: fromTime.value,
+      to: toTime.value,
+      date: formatDate(date.value),
+    }).then(() => {
+    msgSnackbarVisible.value = "Reservation Successfully"
+    isOutlinedSnackbarColor.value = "success"
+    isOutlinedSnackbarVisible.value = true
+    closeViewDialog()
+  }).catch((error) => {
+    msgSnackbarVisible.value = error.response.data.message
+    isOutlinedSnackbarColor.value = "error"
+    isOutlinedSnackbarVisible.value = true
+    closeViewDialog()
+  })
 }
 </script>

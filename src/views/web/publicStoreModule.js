@@ -7,7 +7,11 @@ export default {
     date: null,
     fromTime: null,
     toTime: null,
-    timeSlots:[]
+    timeSlots:[],
+    fromTimeSlots:[],
+    toTimeSlots:[],
+    slotScaleValue:1
+
   },
   getters: {},
   mutations: {
@@ -25,6 +29,15 @@ export default {
     },
     UPDATE_TIME_SLOTS(state, value) {
       state.timeSlots = value
+    },
+    UPDATE_FROM_TIME_SLOTS(state, value) {
+      state.fromTimeSlots = value
+    },
+    UPDATE_TO_TIME_SLOTS(state, value) {
+      state.toTimeSlots = value
+    },
+    UPDATE_SLOT_SCALE_VALUE(state, value) {
+      state.slotScaleValue = value
     },
   },
   actions: {
