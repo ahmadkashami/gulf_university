@@ -62,7 +62,7 @@
             Search
           </v-btn>
 
-          <v-btn @click="onReset" color="orange" variant="outlined"  v-if="reservationMode">
+          <v-btn @click="onReset" color="orange" variant="outlined" v-if="reservationMode">
             reset Filter
           </v-btn>
         </div>
@@ -79,18 +79,32 @@
           cols='12' xl='3' lg='3' md='4' sm='6' class='text-center'
           v-for='(item,i) in roomsListData' :key="i"
         >
-          <Room :room='item' :reservationMode="reservationMode"></Room>
+          <Room :room='item' :reservationMode="reservationMode"
+                @openReservationDialog="openReservationDialog"
+                @viewClassRoomDialog="viewClassRoomDialog"></Room>
         </VCol>
       </VRow>
     </VContainer>
+
+    <ReservationComponent :item-data="room"
+                          v-model:isOpenReservationDialog="isOpenReservationDialog"
+
+
+    ></ReservationComponent>
+    <ViewClassRoomComponent :item-data="room"
+                            v-model:isViewClassRoomDialog="isViewClassRoomDialog"
+
+    />
   </section>
 </template>
 
 <script setup>
 import Room from "@/views/landing/rooms-list/Room.vue";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import DateInputMenu from "@/components/DateInputMenu.vue";
 import useWeb from "@/views/web/useWeb";
+import ReservationComponent from "@/views/landing/components/ReservationComponent.vue";
+import ViewClassRoomComponent from "@/views/landing/components/ViewClassRoomComponent.vue";
 
 const props = defineProps({
   roomsListData: {
@@ -111,10 +125,23 @@ const {
   fetchTimeSlots,
 } = useWeb()
 
-onMounted(()=>{
-  date.value=null;
+onMounted(() => {
+  date.value = null;
   fetchTimeSlots();
 })
+
+const isOpenReservationDialog = ref(false)
+const isViewClassRoomDialog = ref(false)
+const room = ref([]);
+
+const openReservationDialog = (val) => {
+  room.value = val
+  isOpenReservationDialog.value = true;
+}
+const viewClassRoomDialog = (val) => {
+  room.value = val
+  isViewClassRoomDialog.value = true
+}
 
 </script>
 

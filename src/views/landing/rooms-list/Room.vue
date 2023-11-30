@@ -63,24 +63,21 @@
           color='orange'
           variant='outlined'
           v-if="reservationMode==true"
-          @click="isOpenReservationDialog=!isOpenReservationDialog"
+          @click="openReservationDialog"
         >
           reserve
         </VBtn>
         <VBtn
           color='primary'
           variant='outlined'
-          @click="isViewClassRoomDialog=!isViewClassRoomDialog"
+          @click="viewClassRoomDialog"
           v-else
         >
           View Class
         </VBtn>
       </VCardActions>
     </VCard>
-    <ReservationComponent :item-data="room"
-                          v-model:isOpenReservationDialog="isOpenReservationDialog"
-    ></ReservationComponent>
-    <ViewClassRoomComponent :item-data="room"  v-model:isViewClassRoomDialog="isViewClassRoomDialog"/>
+
   </div>
 </template>
 
@@ -101,9 +98,14 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['openReservationDialog','viewClassRoomDialog'])
 
-const isOpenReservationDialog=ref(false)
-const isViewClassRoomDialog=ref(false)
+const openReservationDialog=()=>{
+  emit('openReservationDialog',props.room)
+}
+const viewClassRoomDialog=()=>{
+  emit('viewClassRoomDialog',props.room)
+}
 </script>
 
 <style lang='scss' scoped>

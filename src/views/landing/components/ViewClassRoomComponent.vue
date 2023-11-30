@@ -187,7 +187,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref, watch} from 'vue'
+import {computed, ref, watch} from 'vue'
 import useWeb from "@/views/web/useWeb";
 import DateInputMenu from "@/components/DateInputMenu.vue";
 import {store} from "@/store";
@@ -234,13 +234,6 @@ const timeSlots = computed(() => {
   return store.state.public.timeSlots
 })
 
-onMounted(() => {
-  console.log(timeSlots.value)
-  toTime.value = timeSlots.value[timeSlots.value.length - 1]?.value;
-  fromTime.value = timeSlots.value[0]?.value;
-  date.value = new Date()
-})
-
 
 const events = ref([])
 const slotScaleValue = computed(() => {
@@ -258,14 +251,7 @@ const getClassRoomSchedule = () => {
     console.log(error)
   })
 }
-watch(
-  () => (props.isViewClassRoomDialog),
-  () => {
-    if (props.isViewClassRoomDialog) {
-      getClassRoomSchedule()
-    }
-  },
-)
+
 
 const onChangeTime = () => {
   loading.value=true
@@ -309,4 +295,18 @@ const onSubmit = () => {
     closeViewDialog()
   })
 }
+
+
+watch(
+  () => (props.isViewClassRoomDialog),
+  () => {
+    if (props.isViewClassRoomDialog) {
+      toTime.value = timeSlots.value[timeSlots.value.length - 1]?.value;
+      fromTime.value = timeSlots.value[0]?.value;
+      date.value = new Date()
+      getClassRoomSchedule()
+      onChangeTime()
+    }
+  },
+)
 </script>
