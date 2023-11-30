@@ -117,6 +117,7 @@
 import {computed, onMounted, ref} from 'vue'
 import {store} from '@/store'
 import formatDate from "@/plugins/custom-date";
+import useWeb from "@/views/web/useWeb";
 
 const props = defineProps({
   isOpenReservationDialog: {
@@ -138,10 +139,12 @@ const isOpenReservationDialog = computed({
   },
 })
 
-const loading = ref(false)
-const msgSnackbarVisible = ref(null)
-const isOutlinedSnackbarColor = ref('')
-const isOutlinedSnackbarVisible = ref(null)
+const {
+  loading,
+  msgSnackbarVisible,
+  isOutlinedSnackbarColor,
+  isOutlinedSnackbarVisible
+} = useWeb()
 
 const timeSlots = computed(() => {
   return store.state.public.timeSlots
@@ -163,7 +166,6 @@ onMounted(() => {
   formTimeLabel.value = timeSlots.value.filter(b => b.value == fromTime.value)[0]?.label
   toTimeLabel.value = timeSlots.value.filter(b => b.value == toTime.value)[0]?.label
 })
-
 
 
 //Reserve Room

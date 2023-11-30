@@ -214,10 +214,7 @@ const isViewClassRoomDialog = computed({
 })
 
 
-const loading = ref(false)
-const msgSnackbarVisible = ref(null)
-const isOutlinedSnackbarColor = ref('')
-const isOutlinedSnackbarVisible = ref(null)
+
 
 const {
   fromHours,
@@ -227,6 +224,10 @@ const {
   toTime,
   reservationMode,
   updateDate,
+  loading,
+  msgSnackbarVisible,
+  isOutlinedSnackbarColor,
+  isOutlinedSnackbarVisible
 } = useWeb()
 
 

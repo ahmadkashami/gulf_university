@@ -11,7 +11,10 @@ export default function useWeb() {
   const fromTimeSlots = ref([])
   const toTimeSlots = ref([])
   const slotScaleValue = ref(1)
-
+  const loading = ref(false)
+  const msgSnackbarVisible = ref(null)
+  const isOutlinedSnackbarColor = ref('')
+  const isOutlinedSnackbarVisible = ref(null)
 
   //gel list of  classes
   const fetchDataList = () => {
@@ -105,6 +108,10 @@ export default function useWeb() {
     onSearch,
     onReset,
     roomsListData,
-    fetchTimeSlots
+    fetchTimeSlots,
+    loading,
+    msgSnackbarVisible,
+    isOutlinedSnackbarColor,
+    isOutlinedSnackbarVisible
   }
 }
