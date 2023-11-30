@@ -1,0 +1,164 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+
+// Write your overrides
+
+body {
+  font-family: Poppins !important;
+}
+
+section {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.paragraph-small-title {
+  color: #001DF5FF;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 28.80px;
+  word-wrap: break-word
+}
+.paragraph-x-small-title {
+  color: #001DF5FF;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 28.80px;
+  word-wrap: break-word
+}
+
+.paragraph-bold-title {
+  color: #3D3E48;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 33.18px;
+  word-wrap: break-word
+}
+
+.paragraph-description {
+  color: #3D3E48!important;;
+  font-size: 1rem !important;;
+  font-weight: 400 !important;;
+  line-height: 28.80px !important;;
+  word-wrap: break-word !important;
+  white-space:inherit!important;
+}
+
+
+.text-banner-2 {
+  color: #FFF;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 180%;
+  max-width: 1200px;
+}
+
+.text-banner-1 {
+  color: #FFF;
+  font-size:2rem;
+  font-weight: 700;
+  line-height: 120%;
+  text-transform: capitalize;
+}
+
+.container {
+  @media (min-width: 1200px) {
+    max-width: 1170px !important;
+  }
+
+  @media (min-width: 992px) and (max-width: 1199px) {
+    max-width: 970px !important;
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    max-width: 750px !important;
+  }
+
+  @media (max-width: 768px) {
+    max-width: auto !important;
+  }
+
+}
+
+
+.card-why-us-no-shadow {
+  background: rgb(244 245 251);
+  box-shadow: none !important;
+  overflow: hidden;
+  justify-content: flex-start;
+  align-items: center;
+  border: none !important;
+}
+
+.rtl-background {
+  transform: scalex(-1) !important;
+}
+
+.no-shadow {
+  box-shadow: none !important
+}
+
+.dp__input {
+  height: 42px !important;
+  box-shadow: none !important;
+
+  &:hover {
+    border: 2px solid rgb(var(--v-theme-primary)) !important;
+    box-shadow: none !important
+  }
+}
+
+.v-application {
+  background: transparent !important;
+}
+.background-main-color {
+  background: rgb(var(--v-theme-background)) !important;
+}
+.see-more-btn{
+  width: 269px;
+  height: 35px;
+  border-radius: 25px
+}
+
+.book-now {
+  color: #F7F8E2 !important;
+  font-size: 1rem;
+  font-weight: 500;
+  word-wrap: break-word
+}
+.v-snackbar__content{
+  margin:auto!important;
+}
+
+
+.my-slider {
+  position: relative;
+  top: -100px;
+}
+
+.slider-title {
+  text-align: center;
+  color: white;
+  font-size:2rem;
+  font-weight: 400;
+  line-height: 57.34px;
+  word-wrap: break-word
+}
+
+.slider-decryption {
+  text-align: center;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  line-height: 28.80px;
+  word-wrap: break-word
+}

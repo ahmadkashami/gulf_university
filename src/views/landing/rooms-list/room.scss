@@ -1,0 +1,65 @@
+.v-card {
+  box-shadow: none !important;
+  background: #001df508  !important;
+  border-radius: 16px !important;;
+  border: 1px white solid !important;;
+  backdrop-filter: blur(4px) !important;;
+  padding: 5px !important;;
+  text-align: start !important;
+}
+
+.room-img {
+  cursor: pointer;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.02) !important;
+  border-radius: 8px !important;
+
+}
+
+.room-location {
+  color: #8F8F8F;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.10px;
+  &:hover {
+    color: #42A7C3;
+  }
+}
+
+.room-title {
+  color: #3D3E48;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 22.40px;
+  letter-spacing: 0.50px;
+  text-decoration: none;
+
+  &:hover {
+    color: #42A7C3;
+  }
+}
+
+.room-duration {
+  color: #636363;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 19.60px;
+  letter-spacing: 0.17px;
+}
+
+.room-price {
+  color: #42A7C3;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 19.60px;
+  letter-spacing: 0.17px;
+}
+
+.room-currency {
+  color: #347F90;
+  font-size: 0.6rem;
+  font-weight: 400;
+  line-height: 16.80px;
+  letter-spacing: 0.40px;
+}
+
