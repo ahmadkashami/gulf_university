@@ -15,7 +15,8 @@
       light
     >
       <VCarouselItem
-        :src="Background"
+        v-for="item in sliders"
+        :src="item.cover"
         cover
       >
         <VSheet
@@ -29,12 +30,12 @@
           <VRow>
             <VCol cols="12">
               <div class="slider-title mt-12">
-                Gulf University for Science and Technology
+               {{item.name}}
               </div>
             </VCol>
             <VCol cols="12">
               <div class="slider-decryption">
-                Classroom  Reservation System
+              {{item.desc}}
               </div>
             </VCol>
           </VRow>
@@ -46,13 +47,24 @@
 
 <script setup>
 import Background from '@/assets/images/slider.png'
+import Background2 from '@/assets/images/gulf.png'
 import {ref} from "vue";
+
 const props = defineProps({
   slidersData: {
     type: String,
   },
 })
 
+const sliders = [{
+  cover: Background,
+  name:'Gulf University for Science and Technology',
+  desc:'Classroom Reservation System',
+}, {
+  cover: Background2,
+  name:'',
+  desc:'',
+}];
 const activeSlide = ref(0)
 </script>
 
