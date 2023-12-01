@@ -285,7 +285,7 @@ const onSubmit = () => {
       to: toTime.value,
       date: formatDate(date.value),
     }).then(() => {
-    msgSnackbarVisible.value = "Reservation Successfully"
+    msgSnackbarVisible.value = "Reservation Successfully, We will send the reservation to your email"
     isOutlinedSnackbarColor.value = "success"
     isOutlinedSnackbarVisible.value = true
     closeViewDialog()
