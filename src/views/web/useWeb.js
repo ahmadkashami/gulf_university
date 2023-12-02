@@ -94,6 +94,11 @@ export default function useWeb() {
     return store.state.public.roomsList
   })
 
+  const minDate=ref(null);
+  const  getMinDate=(val = new Date())=> {
+    val.setDate(val.getDate());
+    return formatDate(val);
+  }
   return {
     fetchDataList,
     route,
@@ -112,6 +117,8 @@ export default function useWeb() {
     loading,
     msgSnackbarVisible,
     isOutlinedSnackbarColor,
-    isOutlinedSnackbarVisible
+    isOutlinedSnackbarVisible,
+    minDate,
+    getMinDate
   }
 }

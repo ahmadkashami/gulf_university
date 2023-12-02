@@ -93,6 +93,7 @@
                       label='Date'
                       @update-date='updateDate'
                       density="compact"
+                      :min="minDate"
                     ></date-input-menu>
                   </v-col>
                   <v-col cols="12">
@@ -187,7 +188,7 @@
 </template>
 
 <script setup>
-import {computed, ref, watch} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import useWeb from "@/views/web/useWeb";
 import DateInputMenu from "@/components/DateInputMenu.vue";
 import {store} from "@/store";
@@ -227,9 +228,14 @@ const {
   loading,
   msgSnackbarVisible,
   isOutlinedSnackbarColor,
-  isOutlinedSnackbarVisible
+  isOutlinedSnackbarVisible,
+  minDate,
+  getMinDate
 } = useWeb()
 
+onMounted(()=>{
+  minDate.value=getMinDate()
+})
 
 const timeSlots = computed(() => {
   return store.state.public.timeSlots
@@ -289,6 +295,8 @@ const onSubmit = () => {
     isOutlinedSnackbarColor.value = "success"
     isOutlinedSnackbarVisible.value = true
     closeViewDialog()
+    getClassRoomSchedule()
+    onChangeTime()
   }).catch((error) => {
     msgSnackbarVisible.value = error.response.data.message
     isOutlinedSnackbarColor.value = "error"

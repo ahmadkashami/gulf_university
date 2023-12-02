@@ -10,7 +10,7 @@
         </VCol>
         <VCol cols="12">
           <h4 class='text-banner-2 mx-auto'>
-            Classroom Reservation System
+            Classroom Reservations
           </h4>
         </VCol>
       </VRow>
@@ -18,6 +18,9 @@
     <VContainer id="reservation-classes">
       <v-card class="filter v-card-filter pa-5">
         <v-row>
+          <v-col cols="12" class="paragraph-bold-title text-black text-center">
+            <p> Filter Reservation Classes</p>
+          </v-col>
           <v-col cols="12"
                  md="4"
           ></v-col>
@@ -33,47 +36,6 @@
           <v-col cols="12"
                  md="4"
           ></v-col>
-<!--          <v-col-->
-<!--            cols="12"-->
-<!--            md="4"-->
-<!--          >-->
-<!--            <v-select-->
-<!--              v-model="fromTime"-->
-<!--              :counter="10"-->
-<!--              label="From Time"-->
-<!--              hide-details-->
-<!--              required-->
-<!--              variant="outlined"-->
-<!--              prepend-inner-icon="mdi-clock-time-eight-outline"-->
-<!--              color="primary"-->
-<!--              bg-color="white"-->
-<!--              :items="fromHours"-->
-<!--              item-title="label"-->
-<!--              item-value="value"-->
-<!--              clearable-->
-<!--            ></v-select>-->
-<!--          </v-col>-->
-<!--          <v-col-->
-<!--            cols="12"-->
-<!--            md="4"-->
-<!--          >-->
-<!--            <v-select-->
-<!--              v-model="toTime"-->
-<!--              :counter="10"-->
-<!--              label="To Time"-->
-<!--              hide-details-->
-<!--              required-->
-<!--              variant="outlined"-->
-<!--              prepend-inner-icon="mdi-clock-time-eight-outline"-->
-<!--              color="primary"-->
-<!--              bg-color="white"-->
-<!--              :items="toHours.filter(b=>b.value>fromTime)"-->
-<!--              item-title="label"-->
-<!--              item-value="value"-->
-<!--              :disabled="fromTime==null"-->
-<!--              clearable-->
-<!--            ></v-select>-->
-<!--          </v-col>-->
         </v-row>
         <div class="justify-center text-center mt-5">
           <v-btn color="primary" variant="outlined"  @click="fetchReservationsList">
@@ -81,7 +43,12 @@
           </v-btn>
         </div>
       </v-card>
-      <VRow>
+      <VRow v-if="roomsListData.length==0">
+        <v-col cols="12" class="paragraph-bold-title text-primary text-center">
+          <p> Not Found Reservation Classes</p>
+        </v-col>
+      </VRow>
+      <VRow v-else>
         <VCol cols='12'>
           <p class='paragraph-bold-title mt-5'>
             Reservation Classes

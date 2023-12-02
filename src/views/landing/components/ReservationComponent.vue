@@ -29,7 +29,7 @@
                 >
                   <div class="d-flex mb-3">
                     <div class="font-weight-bold mt-1">
-                      Room Name :
+                      Classroom  Name :
                     </div>
                     <div class="mx-2 rounded pa-1 bg-grey-100">
                       {{ itemData.name }}
@@ -58,7 +58,7 @@
                         From Time :
                       </div>
                       <div class="mx-2 rounded pa-1 bg-grey-100">
-                        {{ fromTime }}
+                        {{ formTimeLabel }}
                       </div>
                     </div>
                     <div class="mx-10"></div>
@@ -67,7 +67,7 @@
                         To time :
                       </div>
                       <div class="mx-2 rounded pa-1 bg-grey-100">
-                        {{ toTime }}
+                        {{ toTimeLabel }}
                       </div>
                     </div>
                   </div>
@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {store} from '@/store'
 import formatDate from "@/plugins/custom-date";
 import useWeb from "@/views/web/useWeb";
@@ -128,7 +128,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:is-open-reservation-dialog'])
+const emit = defineEmits(['update:is-open-reservation-dialog','updateData'])
 
 const isOpenReservationDialog = computed({
   get() {
@@ -163,8 +163,7 @@ const formTimeLabel = ref(null)
 const toTimeLabel = ref(null)
 
 onMounted(() => {
-  formTimeLabel.value = timeSlots.value.filter(b => b.value == fromTime.value)[0]?.label
-  toTimeLabel.value = timeSlots.value.filter(b => b.value == toTime.value)[0]?.label
+
 })
 
 
@@ -187,6 +186,7 @@ const onSubmit = () => {
     isOutlinedSnackbarColor.value = "success"
     isOutlinedSnackbarVisible.value = true
     closeReservationDialog()
+    emit('updateData')
   }).catch((error) => {
     console.log(error)
     msgSnackbarVisible.value = error.response.data.message
@@ -195,4 +195,16 @@ const onSubmit = () => {
     closeReservationDialog()
   })
 }
+
+watch(
+  () => (props.isOpenReservationDialog),
+  () => {
+    if (props.isOpenReservationDialog) {
+      formTimeLabel.value = timeSlots.value.filter(b => b.value == fromTime.value)[0]?.label
+      toTimeLabel.value = timeSlots.value.filter(b => b.value == toTime.value)[0]?.label
+    }
+  },
+)
+
+
 </script>

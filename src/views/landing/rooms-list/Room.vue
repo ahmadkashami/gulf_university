@@ -73,7 +73,7 @@
           @click="viewClassRoomDialog"
           v-else
         >
-          View Class
+          View Classroom
         </VBtn>
       </VCardActions>
     </VCard>

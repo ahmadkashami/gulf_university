@@ -3,6 +3,9 @@
     <VContainer>
       <v-card class="filter v-card-filter">
         <v-row>
+          <v-col cols="12" class="paragraph-bold-title text-black text-center">
+            <p> Search Available Classes</p>
+          </v-col>
           <v-col cols="12"
                  md="4"
           >
@@ -11,6 +14,7 @@
               label='Date'
               @update-date='updateDate'
               :disabled="reservationMode"
+              :min="minDate"
             ></date-input-menu>
           </v-col>
           <v-col
@@ -70,11 +74,16 @@
       <VRow class="mt-4">
         <VCol cols='12'>
           <p class='paragraph-bold-title'>
-            {{ !reservationMode ? 'Discover' : 'Availabel' }} classes
+            {{ !reservationMode ? 'Discover' : 'Available' }} classes
           </p>
         </VCol>
       </VRow>
-      <VRow>
+      <VRow v-if="roomsListData.length==0">
+        <v-col cols="12" class="paragraph-bold-title text-primary text-center">
+          <p> Not found Available Classes</p>
+        </v-col>
+      </VRow>
+      <VRow v-else>
         <VCol
           cols='12' xl='3' lg='3' md='4' sm='6' class='text-center'
           v-for='(item,i) in roomsListData' :key="i"
@@ -88,6 +97,7 @@
 
     <ReservationComponent :item-data="room"
                           v-model:isOpenReservationDialog="isOpenReservationDialog"
+                          @updateData="onSearch"
 
 
     ></ReservationComponent>
@@ -105,6 +115,7 @@ import DateInputMenu from "@/components/DateInputMenu.vue";
 import useWeb from "@/views/web/useWeb";
 import ReservationComponent from "@/views/landing/components/ReservationComponent.vue";
 import ViewClassRoomComponent from "@/views/landing/components/ViewClassRoomComponent.vue";
+import formatDate from "@/plugins/custom-date";
 
 const props = defineProps({
   roomsListData: {
@@ -123,11 +134,18 @@ const {
   onSearch,
   onReset,
   fetchTimeSlots,
+  minDate,
+  getMinDate
 } = useWeb()
+
+
+
+
 
 onMounted(() => {
   date.value = null;
   fetchTimeSlots();
+  minDate.value=getMinDate()
 })
 
 const isOpenReservationDialog = ref(false)
