@@ -19,6 +19,7 @@ export default function useWeb() {
   //gel list of  classes
   const fetchDataList = () => {
     let dateFormat = formatDate(date.value)
+    loading.value=true;
     store.dispatch('public/fetchRoomsList', {
       date: date.value ? dateFormat : null,
       from: fromTime.value,
@@ -27,8 +28,10 @@ export default function useWeb() {
       .then(response => {
         roomsList.value = response.data.data
         store.commit('public/UPDATE_ROOMS_LIST', roomsList.value)
+        loading.value=false;
       }).catch(error => {
       console.log(error)
+      loading.value=false;
     })
   }
 

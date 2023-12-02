@@ -38,14 +38,16 @@
           ></v-col>
         </v-row>
         <div class="justify-center text-center mt-5">
-          <v-btn color="primary" variant="outlined"  @click="fetchReservationsList">
+          <v-btn color="primary"
+                 :loading="loading"
+                 variant="outlined"  @click="fetchReservationsList">
             filter
           </v-btn>
         </div>
       </v-card>
       <VRow v-if="roomsListData?.length==0">
         <v-col cols="12" class="paragraph-bold-title text-primary text-center">
-          <p> No reservations is found</p>
+          <p>{{ loading?"Loading...": "No reservations is found "}}</p>
         </v-col>
       </VRow>
       <VRow v-else>
@@ -87,16 +89,20 @@ const roomsListData = ref([])
 const {
   date,
   updateDate,
-  fetchTimeSlots
+  fetchTimeSlots,
+  loading,
 } = useWeb()
 const fetchReservationsList = () => {
+  loading.value=true;
   let dateFormat = formatDate(date.value)
   store.dispatch('public/fetchReservationsList', {
     date: date.value ? dateFormat : null,
   })
     .then(response => {
       roomsListData.value = response.data.data
+      loading.value=false
     }).catch(error => {
+    loading.value=false;
     console.log(error)
   })
 }

@@ -80,7 +80,7 @@
       </VRow>
       <VRow v-if="roomsListData?.length==0">
         <v-col cols="12" class="paragraph-bold-title text-primary text-center">
-          <p> Not found Available Classes</p>
+          <p>{{loading?"Loading...":" Not found Available Classes"}}</p>
         </v-col>
       </VRow>
       <VRow v-else>
@@ -135,7 +135,8 @@ const {
   onReset,
   fetchTimeSlots,
   minDate,
-  getMinDate
+  getMinDate,
+  loading
 } = useWeb()
 
 
