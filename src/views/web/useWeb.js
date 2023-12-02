@@ -82,6 +82,7 @@ export default function useWeb() {
     toTime.value = null
     updateStateValues()
     reservationMode.value = !reservationMode.value
+    fetchDataList()
   }
 
   watch([fromTime], () => {
