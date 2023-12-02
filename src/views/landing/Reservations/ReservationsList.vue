@@ -45,7 +45,7 @@
       </v-card>
       <VRow v-if="roomsListData?.length==0">
         <v-col cols="12" class="paragraph-bold-title text-primary text-center">
-          <p> Not Found Reservation Classes</p>
+          <p> No reservations is found</p>
         </v-col>
       </VRow>
       <VRow v-else>
