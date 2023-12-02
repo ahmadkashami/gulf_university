@@ -10,7 +10,7 @@
         </VCol>
         <VCol cols="12">
           <h4 class='text-banner-2 mx-auto'>
-            Classroom Reservations
+            Filter Reservations
           </h4>
         </VCol>
       </VRow>
