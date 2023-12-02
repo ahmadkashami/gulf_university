@@ -306,6 +306,9 @@ const onSubmit = () => {
 }
 
 
+watch([date],()=>{
+  getClassRoomSchedule()
+})
 watch(
   () => (props.isViewClassRoomDialog),
   () => {
@@ -313,7 +316,6 @@ watch(
       toTime.value = timeSlots.value[timeSlots.value.length - 1]?.value;
       fromTime.value = timeSlots.value[0]?.value;
       date.value = new Date()
-      getClassRoomSchedule()
       onChangeTime()
     }
   },

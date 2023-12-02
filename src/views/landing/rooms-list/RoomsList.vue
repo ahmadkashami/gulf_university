@@ -74,7 +74,7 @@
       <VRow class="mt-4">
         <VCol cols='12'>
           <p class='paragraph-bold-title'>
-            {{ !reservationMode ? 'Discover' : 'Available' }} classes
+            {{ !reservationMode ? 'Discover' : 'Available' }} Classroom
           </p>
         </VCol>
       </VRow>

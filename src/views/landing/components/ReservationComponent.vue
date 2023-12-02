@@ -29,7 +29,7 @@
                 >
                   <div class="d-flex mb-3">
                     <div class="font-weight-bold mt-1">
-                      Classroom  Name :
+                        Name :
                     </div>
                     <div class="mx-2 rounded pa-1 bg-grey-100">
                       {{ itemData.name }}
@@ -38,7 +38,7 @@
 
                   <div class="d-flex mb-3">
                     <div class="font-weight-bold mt-1">
-                      Room location :
+                       Location :
                     </div>
                     <div class="mx-2 rounded pa-1 bg-grey-100">
                       {{ itemData.building }}-{{ itemData.floorNo }}
