@@ -1,6 +1,7 @@
 {
   "name": "gulf_university",
   "version": "0.0.0",
+  "author": "Ahmad Alkashami",
   "private": true,
   "scripts": {
     "dev": "vite",
