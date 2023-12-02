@@ -10,7 +10,7 @@
         </VCol>
         <VCol cols="12">
           <h4 class='text-banner-2 mx-auto'>
-            Filter Reservations
+              Reservations List
           </h4>
         </VCol>
       </VRow>
@@ -19,7 +19,7 @@
       <v-card class="filter v-card-filter pa-5">
         <v-row>
           <v-col cols="12" class="paragraph-bold-title text-black text-center">
-            <p> Filter Reservation Classes</p>
+            <p> Filter Reservations</p>
           </v-col>
           <v-col cols="12"
                  md="4"
