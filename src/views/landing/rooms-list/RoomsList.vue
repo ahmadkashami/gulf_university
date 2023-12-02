@@ -4,7 +4,7 @@
       <v-card class="filter v-card-filter">
         <v-row>
           <v-col cols="12" class="paragraph-bold-title text-black text-center">
-            <p> Search Available Classes</p>
+            <p> Search Available Classrooms</p>
           </v-col>
           <v-col cols="12"
                  md="4"
