@@ -51,7 +51,7 @@
       <VRow v-else>
         <VCol cols='12'>
           <p class='paragraph-bold-title mt-5'>
-            Reservation Classes
+            Reservations Classes
           </p>
         </VCol>
       </VRow>
